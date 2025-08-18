@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Shots - How to Play</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 50%, #0f051a 100%);
+            color: #e6e6fa;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+        
+        .title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #42ffff, #ff5aff, #ffb642);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(66, 255, 255, 0.5);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #42ffff;
+            opacity: 0.8;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            background: rgba(20, 8, 30, 0.8);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            color: #e6e6fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(66, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .tab:hover::before {
+            left: 100%;
+        }
+        
+        .tab:hover {
+            border-color: #42ffff;
+            box-shadow: 0 0 20px rgba(66, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .tab.active {
+            background: rgba(66, 255, 255, 0.1);
+            border-color: #42ffff;
+            box-shadow: 0 0 25px rgba(66, 255, 255, 0.4);
+            color: #42ffff;
+        }
+        
+        .content-panel {
+            background: rgba(14, 8, 22, 0.9);
+            border: 2px solid #42ffff;
+            border-radius: 20px;
+            padding: 30px;
+            min-height: 600px;
+            box-shadow: 0 0 30px rgba(66, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content-panel::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #42ffff, #ff5aff, #ffb642, #42ffff);
+            background-size: 300% 300%;
+            border-radius: 20px;
+            z-index: -1;
+            animation: borderGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            color: #42ffff;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .block-grid, .enemy-grid, .powerup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .item-card {
+            background: rgba(40, 30, 60, 0.8);
+            border: 1px solid rgba(66, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(66, 255, 255, 0.2);
+            border-color: #42ffff;
+        }
+        
+        .item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .item-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #e6e6fa;
+        }
+        
+        .item-description {
+            color: #b8b8d1;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .item-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            background: rgba(20, 8, 30, 0.8);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(66, 255, 255, 0.2);
+        }
+        
+        .overview-section {
+            margin-bottom: 30px;
+        }
+        
+        .overview-section h3 {
+            color: #ff5aff;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .overview-section p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #d1d1e0;
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .control-item {
+            background: rgba(40, 30, 60, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 90, 255, 0.3);
+        }
+        
+        .control-key {
+            color: #ffb642;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(20, 8, 30, 0.9);
+            border: 2px solid #42ffff;
+            color: #42ffff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-button:hover {
+            background: rgba(66, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(66, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .tab-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+            }
+            
+            .content-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <a href="#" class="back-button">← Back to Game</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🎮 BLOCK SHOTS 🎮</h1>
+            <p class="subtitle">Master the Art of Tactical Defense</p>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tab active" data-tab="overview">📖 Overview</div>
+            <div class="tab" data-tab="blocks">🔷 Blocks</div>
+            <div class="tab" data-tab="enemies">👾 Enemies</div>
+            <div class="tab" data-tab="powerups">⚡ Power-ups</div>
+        </div>
+        
+        <div class="content-panel">
+            <!-- Overview Tab -->
+            <div class="tab-content active" id="overview">
+                <h2 class="section-title">🎯 Game Overview</h2>
+                
+                <div class="overview-section">
+                    <h3>🎮 Objective</h3>
+                    <p>Block Shots is a unique fusion of Tetris and tower defense! Drop Tetris pieces to build defensive structures while waves of enemies march toward the top of your grid. Use different block types strategically to create powerful defenses and survive as long as possible.</p>
+                </div>
+                
+                <div class="overview-section">
+                    <h3>🎲 Core Mechanics</h3>
+                    <p><strong>Tetris Gameplay:</strong> Standard Tetris controls - rotate, move, and drop pieces to fill your grid.</p>
+                    <p><strong>Tower Defense:</strong> Each block type has unique defensive properties that automatically activate against enemies.</p>
+                    <p><strong>Resource Management:</strong> Earn scraps by clearing lines and defeating enemies to purchase special abilities.</p>
+                    <p><strong>Progressive Difficulty:</strong> Enemies get stronger each level, but so do your rewards!</p>
+                </div>
+                
+                <div class="overview-section">
+                    <h3>🎮 Controls</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <div class="control-key">← → ↓ ↑</div>
+                            <div>Move & Rotate Piece</div>
+                        </div>
+                        <div class="control-item">
+                            <div class="control-key">WASD</div>
+                            <div>Alternative Movement</div>
+                        </div>
+                        <div class="control-item">
+                            <div class="control-key">SPACE</div>
+                            <div>Hard Drop (+Bonus)</div>
+                        </div>
+                        <div class="control-item">
+                            <div class="control-key">E</div>
+                            <div>Hold Piece</div>
+                        </div>
+                        <div class="control-item">
+                            <div class="control-key">Z</div>
+                            <div>Buy Mine Block</div>
+                        </div>
+                        <div class="control-item">
+                            <div class="control-key">X</div>
+                            <div>Grid Shift Power-up</div>
+                        </div>
+                        <div class="control-item">
+                            <div class="control-key">C</div>
+                            <div>Block Duplicator</div>
+                        </div>
+                        <div class="control-item">
+                            <div class="control-key">P</div>
+                            <div>Pause Game</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overview-section">
+                    <h3>🏆 Scoring</h3>
+                    <p>Earn points by clearing lines, defeating enemies, and surviving waves. Use the space bar for hard drops to get bonus points and scraps. Your score determines your level, which increases both difficulty and rewards!</p>
+                </div>
+            </div>
+            
+            <!-- Blocks Tab -->
+            <div class="tab-content" id="blocks">
+                <h2 class="section-title">🔷 Defensive Blocks</h2>
+                
+                <div class="block-grid">
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #42ffff; color: #000;">I</div>
+                            <div class="item-name">Cyan Wall (I-Block)</div>
+                        </div>
+                        <div class="item-description">
+                            High-health defensive wall that blocks enemy advancement. Perfect for creating chokepoints and buying time for your other defenses.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 15</div>
+                            <div class="stat">Type: Defensive</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ffe650; color: #000;">O</div>
+                            <div class="item-name">Yellow Mine (O-Block)</div>
+                        </div>
+                        <div class="item-description">
+                            Explosive mine that detonates after a short timer, dealing massive area damage to nearby enemies and destroying adjacent blocks. When buffed by Helper blocks, the destruction range doubles from 3x3 to 4x4!
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 7</div>
+                            <div class="stat">Damage: High AoE</div>
+                            <div class="stat">Timer: 1 second</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ff5a6e; color: #fff;">T</div>
+                            <div class="item-name">Red Gatling (T-Block)</div>
+                        </div>
+                        <div class="item-description">
+                            Rapid-fire turret that shoots projectiles at enemies in the same column. High rate of fire with moderate damage.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 9</div>
+                            <div class="stat">Range: Vertical Column</div>
+                            <div class="stat">Fire Rate: High</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ff9632; color: #000;">L</div>
+                            <div class="item-name">Orange Mortar (L-Block)</div>
+                        </div>
+                        <div class="item-description">
+                            Long-range artillery that fires explosive projectiles at enemies. Slower fire rate but high damage and wide targeting range.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 9</div>
+                            <div class="stat">Range: 7 columns</div>
+                            <div class="stat">Damage: High</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #64a0ff; color: #fff;">J</div>
+                            <div class="item-name">Blue Mortar (J-Block)</div>
+                        </div>
+                        <div class="item-description">
+                            Similar to Orange Mortar but with slightly different projectile characteristics. Great for creating crossfire with L-blocks.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 9</div>
+                            <div class="stat">Range: 7 columns</div>
+                            <div class="stat">Damage: High</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #78ff8c; color: #000;">S</div>
+                            <div class="item-name">Green Slowing Field (S-Block)</div>
+                        </div>
+                        <div class="item-description">
+                            Creates a slowing aura that reduces enemy movement speed in a 3x3 area. Essential for crowd control and supporting other defenses.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 5</div>
+                            <div class="stat">Effect: Speed Reduction</div>
+                            <div class="stat">Range: 3x3 area</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ff5aff; color: #fff;">Z</div>
+                            <div class="item-name">Magenta Slowing Field (Z-Block)</div>
+                        </div>
+                        <div class="item-description">
+                            Another slowing field variant that stacks with S-blocks for maximum enemy slowdown. Different visual effects but same mechanics.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 5</div>
+                            <div class="stat">Effect: Speed Reduction</div>
+                            <div class="stat">Range: 3x3 area</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #c878ff; color: #fff;">H</div>
+                            <div class="item-name">Purple Helper Block (H-Block)</div>
+                        </div>
+                        <div class="item-description">
+                            Support block that buffs all adjacent blocks, increasing their health by 50% and enhancing their abilities. Buffed mines have extended destruction range, dealing damage in a 4x4 area instead of 3x3!
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 8</div>
+                            <div class="stat">Buff: +50% HP</div>
+                            <div class="stat">Range: Adjacent blocks</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Enemies Tab -->
+            <div class="tab-content" id="enemies">
+                <h2 class="section-title">👾 Enemy Forces</h2>
+                
+                <div class="enemy-grid">
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #c8c8dc; color: #000;">G</div>
+                            <div class="item-name">Grunt</div>
+                        </div>
+                        <div class="item-description">
+                            Basic enemy unit with balanced stats. The backbone of enemy forces, appearing in large numbers in most waves.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 5</div>
+                            <div class="stat">Speed: Medium</div>
+                            <div class="stat">Damage: Low</div>
+                            <div class="stat">Reward: 10 + 2 Scraps</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ffa078; color: #000;">S</div>
+                            <div class="item-name">Sprinter</div>
+                        </div>
+                        <div class="item-description">
+                            Fast but fragile enemy that tries to rush past your defenses. Prioritize these with rapid-fire weapons.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 3</div>
+                            <div class="stat">Speed: Fast</div>
+                            <div class="stat">Damage: Very Low</div>
+                            <div class="stat">Reward: 10 + 2 Scraps</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #b4b4ff; color: #000;">B</div>
+                            <div class="item-name">Brute</div>
+                        </div>
+                        <div class="item-description">
+                            Heavily armored enemy with high health and damage. Slow but extremely dangerous if it reaches your blocks.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 20</div>
+                            <div class="stat">Speed: Slow</div>
+                            <div class="stat">Damage: High</div>
+                            <div class="stat">Reward: 10 + 3 Scraps</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ffdc78; color: #000;">💣</div>
+                            <div class="item-name">Bomber</div>
+                        </div>
+                        <div class="item-description">
+                            Suicide unit that explodes on contact with blocks, destroying everything in a small area. Extremely dangerous!
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 6</div>
+                            <div class="stat">Speed: Slow</div>
+                            <div class="stat">Damage: Explosive</div>
+                            <div class="stat">Reward: 15 + 2 Scraps</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ff3cff; color: #fff;">J</div>
+                            <div class="item-name">Juggernaut</div>
+                        </div>
+                        <div class="item-description">
+                            Elite armored unit immune to projectiles! Only explosive mines can damage it. Rare but extremely threatening.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 1 (Armored)</div>
+                            <div class="stat">Speed: Very Slow</div>
+                            <div class="stat">Immunity: Projectiles</div>
+                            <div class="stat">Reward: 25 + 5 Scraps</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #654321; color: #fff;">M</div>
+                            <div class="item-name">Miner</div>
+                        </div>
+                        <div class="item-description">
+                            Massive boss enemy that appears every 5 waves. Can mine blocks above and around it while advancing. Semi-armored against mortars.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">HP: 85</div>
+                            <div class="stat">Speed: Slow</div>
+                            <div class="stat">Special: Mining</div>
+                            <div class="stat">Reward: 50 + 15 Scraps</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overview-section">
+                    <h3>⚔️ Combat Tips</h3>
+                    <p><strong>Juggernauts:</strong> Only explosive mines (O-blocks) can damage them. Build mine fields to stop them!</p>
+                    <p><strong>Bombers:</strong> Take them out at range before they reach your defenses.</p>
+                    <p><strong>Miners:</strong> Mini-boss enemies that mine blocks - use concentrated firepower and mines.</p>
+                    <p><strong>Scaling:</strong> All enemies get stronger each level, but rewards scale too!</p>
+                </div>
+            </div>
+            
+            <!-- Power-ups Tab -->
+            <div class="tab-content" id="powerups">
+                <h2 class="section-title">⚡ Power-ups & Abilities</h2>
+                
+                <div class="powerup-grid">
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #42ffff; color: #000;">💣</div>
+                            <div class="item-name">Buy Mine Block</div>
+                        </div>
+                        <div class="item-description">
+                            Instantly replace your current falling piece with an explosive O-block mine. Perfect for emergency defense or setting up explosive traps.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">Cost: 60 Scraps</div>
+                            <div class="stat">Hotkey: Z</div>
+                            <div class="stat">Effect: Instant O-Block</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ff5aff; color: #fff;">↓</div>
+                            <div class="item-name">Grid Shift</div>
+                        </div>
+                        <div class="item-description">
+                            Shifts all blocks down by one row, removing the bottom row and creating space at the top. Gives score based on blocks removed.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">Cost: 100 Scraps</div>
+                            <div class="stat">Hotkey: X</div>
+                            <div class="stat">Bonus: 15 pts/block</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ff9632; color: #fff;">⧉</div>
+                            <div class="item-name">Block Duplicator</div>
+                        </div>
+                        <div class="item-description">
+                            Makes your next 2 pieces the same type as your current falling piece. Great for setting up coordinated defenses or filling specific needs.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">Cost: 200 Scraps</div>
+                            <div class="stat">Hotkey: C</div>
+                            <div class="stat">Effect: 2 duplicates</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #ffb642; color: #000;">🚀</div>
+                            <div class="item-name">Hard Drop Bonus</div>
+                        </div>
+                        <div class="item-description">
+                            Using spacebar to hard drop pieces gives bonus score and scraps. Free ability that rewards aggressive play!
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">Cost: Free</div>
+                            <div class="stat">Hotkey: SPACE</div>
+                            <div class="stat">Bonus: Score + Scraps</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #78ff8c; color: #000;">H</div>
+                            <div class="item-name">Helper Block Buffs</div>
+                        </div>
+                        <div class="item-description">
+                            Purple Helper blocks (H-blocks) automatically buff all adjacent blocks, increasing their HP by 50% and enhancing their special abilities. Buffed mines get double destruction range, mortars gain extended targeting range, and all defenses become significantly more powerful!
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">Effect: +50% HP</div>
+                            <div class="stat">Range: Adjacent</div>
+                            <div class="stat">Auto-activate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-icon" style="background: #e6e6fa; color: #000;">E</div>
+                            <div class="item-name">Hold Piece</div>
+                        </div>
+                        <div class="item-description">
+                            Store your current piece for later use. Can only be used once per piece placement. Strategic holding can help you get the right piece at the right time.
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat">Cost: Free</div>
+                            <div class="stat">Hotkey: E</div>
+                            <div class="stat">Limit: Once per piece</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overview-section">
+                    <h3>💰 Earning Scraps</h3>
+                    <p><strong>Line Clears:</strong> Primary source of scraps. Clear multiple lines at once for bonus rewards!</p>
+                    <p><strong>Enemy Defeats:</strong> Each enemy type drops scraps when destroyed.</p>
+                    <p><strong>Hard Drops:</strong> Use spacebar for extra scraps with each piece placement.</p>
+                    <p><strong>Level Scaling:</strong> Higher levels give more scraps from all sources.</p>
+                </div>
+                
+                <div class="overview-section">
+                    <h3>🎯 Strategy Tips</h3>
+                    <p><strong>Helper Synergy:</strong> Place Helper blocks near your strongest defenses for maximum effect.</p>
+                    <p><strong>Resource Management:</strong> Save scraps for critical moments - don't spend them all immediately.</p>
+                    <p><strong>Mixed Defense:</strong> Combine different block types for layered defense strategies.</p>
+                    <p><strong>Emergency Options:</strong> Keep enough scraps for emergency mine purchases or grid shifts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Create animated stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numStars = 150;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Tab switching functionality
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Show corresponding content
+                    const targetContent = document.getElementById(tab.dataset.tab);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        }
+        
+        // Smooth scrolling for internal links
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Add hover effects to cards
+        function initCardEffects() {
+            const cards = document.querySelectorAll('.item-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        }
+        
+        // Floating animation for some elements
+        function initFloatingAnimation() {
+            const floatingElements = document.querySelectorAll('.item-icon');
+            
+            floatingElements.forEach((element, index) => {
+                element.style.animation = `float ${3 + (index % 3)}s ease-in-out infinite`;
+                element.style.animationDelay = `${index * 0.2}s`;
+            });
+        }
+        
+        // Add floating keyframes
+        function addFloatingKeyframes() {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    25% { transform: translateY(-3px) rotate(1deg); }
+                    50% { transform: translateY(-6px) rotate(0deg); }
+                    75% { transform: translateY(-3px) rotate(-1deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Parallax scrolling effect
+        function initParallax() {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                const stars = document.getElementById('stars');
+                stars.style.transform = `translateY(${rate}px)`;
+            });
+        }
+        
+        // Keyboard navigation
+        function initKeyboardNav() {
+            document.addEventListener('keydown', (e) => {
+                const tabs = document.querySelectorAll('.tab');
+                const activeTab = document.querySelector('.tab.active');
+                const currentIndex = Array.from(tabs).indexOf(activeTab);
+                
+                if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    tabs[currentIndex - 1].click();
+                } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
+                    tabs[currentIndex + 1].click();
+                }
+            });
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            initTabs();
+            initSmoothScrolling();
+            initCardEffects();
+            addFloatingKeyframes();
+            initFloatingAnimation();
+            initParallax();
+            initKeyboardNav();
+            
+            // Add some random glow effects
+            setInterval(() => {
+                const cards = document.querySelectorAll('.item-card');
+                if (cards.length > 0) {
+                    const randomCard = cards[Math.floor(Math.random() * cards.length)];
+                    randomCard.style.boxShadow = '0 10px 30px rgba(66, 255, 255, 0.4)';
+                    setTimeout(() => {
+                        randomCard.style.boxShadow = '';
+                    }, 2000);
+                }
+            }, 5000);
+        });
+        
+        // Add some interactive sound effects (visual feedback)
+        function addClickFeedback() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        }
+        
+        // Initialize click feedback
+        document.addEventListener('DOMContentLoaded', addClickFeedback);
+    </script>
+</body>
+</html>
