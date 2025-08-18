@@ -65,6 +65,50 @@
             }
         }
 
+        .nav-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(20, 8, 30, 0.9);
+            border: 2px solid #42ffff;
+            color: #42ffff;
+            padding: 12px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+
+        .nav-button:hover {
+            background: rgba(66, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(66, 255, 255, 0.3);
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(66, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -572,6 +616,15 @@
             background-clip: text;
         }
 
+        @media (max-width: 768px) {
+            .nav-button {
+                font-size: 0.8em;
+                padding: 10px 15px;
+                top: 15px;
+                left: 15px;
+            }
+        }
+
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 1.8em;
@@ -603,6 +656,11 @@
 <body>
     <!-- Animated background particles -->
     <div class="particles" id="particles"></div>
+
+    <!-- Navigation Button -->
+    <a href="How to play.html" class="nav-button">
+        📖 How to Play
+    </a>
 
     <div class="container">
         <div class="header">
@@ -805,107 +863,4 @@
             },
             'Viraal': {
                 scores: [
-                    { version: 'v2.5', mode: 'Power Saving', score: 12867, rank: 1 }
-                ]
-            }
-        };
-
-        function showVersion(version) {
-            // Hide all content
-            const contents = document.querySelectorAll('.version-content');
-            contents.forEach(content => content.classList.remove('active'));
-            
-            // Remove active from all tabs
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Show selected content
-            document.getElementById(version).classList.add('active');
-            
-            // Add active to clicked tab
-            event.target.classList.add('active');
-        }
-
-        function showProfile(playerName) {
-            const modal = document.getElementById('profileModal');
-            const player = playerData[playerName];
-            
-            if (player) {
-                // Set player name
-                document.getElementById('profileName').textContent = `🎮 ${playerName}'s Profile`;
-                
-                // Calculate stats
-                const totalGames = player.scores.length;
-                const highestScore = Math.max(...player.scores.map(s => s.score));
-                const avgRank = Math.round(player.scores.reduce((sum, s) => sum + s.rank, 0) / totalGames);
-                
-                document.getElementById('totalGames').textContent = totalGames;
-                document.getElementById('highestScore').textContent = highestScore.toLocaleString();
-                document.getElementById('avgRank').textContent = `#${avgRank}`;
-                
-                // Build score history with rank information
-                const historyHtml = player.scores.map(s => {
-                    let rankClass = 'rank-other';
-                    if (s.rank === 1) rankClass = 'rank-1';
-                    else if (s.rank === 2) rankClass = 'rank-2';
-                    else if (s.rank === 3) rankClass = 'rank-3';
-                    
-                    return `
-                        <div class="profile-score-item">
-                            <div>
-                                <div class="profile-score-mode">${s.mode} <span class="profile-score-version">(${s.version})</span></div>
-                                <div class="profile-score-rank ${rankClass}">🏆 Rank #${s.rank}</div>
-                            </div>
-                            <div class="profile-score-value">${s.score.toLocaleString()}</div>
-                        </div>
-                    `;
-                }).join('');
-                
-                document.getElementById('scoreHistory').innerHTML = historyHtml;
-                
-                // Show modal
-                modal.classList.add('show');
-            }
-        }
-
-        function closeProfile() {
-            const modal = document.getElementById('profileModal');
-            modal.classList.add('closing');
-            
-            // Hide modal after animation completes
-            setTimeout(() => {
-                modal.classList.remove('show', 'closing');
-            }, 500);
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('profileModal');
-            if (event.target == modal) {
-                closeProfile();
-            }
-        }
-
-        // Create floating particles
-        document.addEventListener('DOMContentLoaded', function() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
-
-            // Add entrance animation to score entries
-            const scoreEntries = document.querySelectorAll('.score-entry');
-            scoreEntries.forEach((entry, index) => {
-                entry.style.animation = `slideIn 0.5s ease-out ${index * 0.1}s both`;
-            });
-        });
-    </script>
-</body>
-</html>
+                    { version: 'v2.5', mode: 'Power Saving', score: 12867, rank: 1
