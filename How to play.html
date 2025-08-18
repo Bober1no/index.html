@@ -309,6 +309,154 @@
             transform: translateY(-2px);
         }
         
+        /* Change Log Styles */
+        .version-card {
+            background: rgba(40, 30, 60, 0.8);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .version-card.major {
+            border-color: #ff5aff;
+            box-shadow: 0 0 20px rgba(255, 90, 255, 0.2);
+        }
+        
+        .version-card.minor {
+            border-color: #42ffff;
+            box-shadow: 0 0 15px rgba(66, 255, 255, 0.15);
+        }
+        
+        .version-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(66, 255, 255, 0.3);
+        }
+        
+        .version-badge {
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin-right: 15px;
+        }
+        
+        .version-badge.major {
+            background: linear-gradient(45deg, #ff5aff, #ff3cff);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 90, 255, 0.4);
+        }
+        
+        .version-badge.minor {
+            background: linear-gradient(45deg, #42ffff, #64a0ff);
+            color: #000;
+            box-shadow: 0 0 15px rgba(66, 255, 255, 0.4);
+        }
+        
+        .version-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e6e6fa;
+        }
+        
+        .change-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .change-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(20, 8, 30, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .change-item:hover {
+            background: rgba(30, 18, 40, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .change-item.buff {
+            border-left-color: #78ff8c;
+        }
+        
+        .change-item.nerf {
+            border-left-color: #ff5a6e;
+        }
+        
+        .change-item.feature {
+            border-left-color: #42ffff;
+        }
+        
+        .change-item.qol {
+            border-left-color: #ffb642;
+        }
+        
+        .change-item.balance {
+            border-left-color: #ff9632;
+        }
+        
+        .change-item.bugfix {
+            border-left-color: #c878ff;
+        }
+        
+        .change-emoji {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            min-width: 25px;
+        }
+        
+        .change-text {
+            line-height: 1.5;
+            color: #d1d1e0;
+        }
+        
+        .change-type {
+            background: rgba(66, 255, 255, 0.2);
+            color: #42ffff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-right: 8px;
+            text-transform: uppercase;
+        }
+        
+        .change-type.buff {
+            background: rgba(120, 255, 140, 0.2);
+            color: #78ff8c;
+        }
+        
+        .change-type.nerf {
+            background: rgba(255, 90, 110, 0.2);
+            color: #ff5a6e;
+        }
+        
+        .change-type.qol {
+            background: rgba(255, 182, 66, 0.2);
+            color: #ffb642;
+        }
+        
+        .change-type.balance {
+            background: rgba(255, 150, 50, 0.2);
+            color: #ff9632;
+        }
+        
+        .change-type.bugfix {
+            background: rgba(200, 120, 255, 0.2);
+            color: #c878ff;
+        }
+        
         @media (max-width: 768px) {
             .title {
                 font-size: 2.5rem;
@@ -328,17 +476,23 @@
             .content-panel {
                 padding: 20px;
             }
+            
+            .version-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="stars" id="stars"></div>
     
-    <a href="index.html" class="back-button">← LeaderBoard</a>
+    <a href="#" class="back-button">← Back to Game</a>
     
     <div class="container">
         <div class="header">
-            <h1 class="title">🎮 BLOCK SHOTS V2.6 🎮</h1>
+            <h1 class="title">🎮 BLOCK SHOTS 🎮</h1>
             <p class="subtitle">Master the Art of Tactical Defense</p>
         </div>
         
@@ -347,6 +501,7 @@
             <div class="tab" data-tab="blocks">🔷 Blocks</div>
             <div class="tab" data-tab="enemies">👾 Enemies</div>
             <div class="tab" data-tab="powerups">⚡ Power-ups</div>
+            <div class="tab" data-tab="changelog">📋 Change Log</div>
         </div>
         
         <div class="content-panel">
@@ -760,6 +915,328 @@
                     <p><strong>Emergency Options:</strong> Keep enough scraps for emergency mine purchases or grid shifts.</p>
                 </div>
             </div>
+            
+            <!-- Change Log Tab -->
+            <div class="tab-content" id="changelog">
+                <h2 class="section-title">📋 Change Log</h2>
+                
+                <!-- Version 2.6 -->
+                <div class="version-card major">
+                    <div class="version-header">
+                        <div class="version-badge major">v2.6</div>
+                        <div class="version-title">🔧 Quality of Life & Balance Update</div>
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item qol">
+                            <span class="change-emoji">⚡</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Down arrow key now moves at a predictable speed instead of scaling with gravity - no more surprises!
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">🛡️</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Added small delay between blocks when holding arrow keys to prevent accidental double-moves
+                            </span>
+                        </li>
+                        <li class="change-item balance">
+                            <span class="change-emoji">🏗️</span>
+                            <span class="change-text">
+                                <span class="change-type balance">Balance</span>
+                                Enemy spawning now wave-based only - encourages active line clearing over defensive stalling
+                            </span>
+                        </li>
+                        <li class="change-item bugfix">
+                            <span class="change-emoji">💥</span>
+                            <span class="change-text">
+                                <span class="change-type bugfix">Fix</span>
+                                Mine block Helper buff range corrected to 4 cells (was accidentally 6)
+                            </span>
+                        </li>
+                        <li class="change-item nerf">
+                            <span class="change-emoji">📊</span>
+                            <span class="change-text">
+                                <span class="change-type nerf">Nerf</span>
+                                Line clearing bonuses reduced from 30%/15% to 5% for smoother difficulty curve
+                            </span>
+                        </li>
+                        <li class="change-item nerf">
+                            <span class="change-emoji">🎯</span>
+                            <span class="change-text">
+                                <span class="change-type nerf">Nerf</span>
+                                Base line clearing score decreased by 5%
+                            </span>
+                        </li>
+                        <li class="change-item buff">
+                            <span class="change-emoji">⚡</span>
+                            <span class="change-text">
+                                <span class="change-type buff">Buff</span>
+                                Block Duplicator cost reduced by 10 scraps (200 → 190)
+                            </span>
+                        </li>
+                        <li class="change-item feature">
+                            <span class="change-emoji">⏸️</span>
+                            <span class="change-text">
+                                <span class="change-type">Feature</span>
+                                Added pause/resume functionality - press P to pause!
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Version 2.5 -->
+                <div class="version-card major">
+                    <div class="version-header">
+                        <div class="version-badge major">v2.5</div>
+                        <div class="version-title">🟣 Helper Block Update</div>
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item feature">
+                            <span class="change-emoji">🟣</span>
+                            <span class="change-text">
+                                <span class="change-type">Feature</span>
+                                <strong>NEW Helper Block!</strong> Purple H-blocks buff adjacent defenses with +50% HP and enhanced abilities
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">🚀</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Space bar hard drops now grant bonus score (10) and scraps (2) - affected by level multipliers
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">📐</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Entire UI scaled up by 10% for better visibility
+                            </span>
+                        </li>
+                        <li class="change-item balance">
+                            <span class="change-emoji">👾</span>
+                            <span class="change-text">
+                                <span class="change-type balance">Balance</span>
+                                After wave 15, enemy spawn rate increased every 3 waves instead of 2
+                            </span>
+                        </li>
+                        <li class="change-item nerf">
+                            <span class="change-emoji">🌪️</span>
+                            <span class="change-text">
+                                <span class="change-type nerf">Nerf</span>
+                                S/Z slowing blocks reduced by 5% due to Helper block synergy
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">👻</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Ghost piece outline shows where blocks will land
+                            </span>
+                        </li>
+                        <li class="change-item feature">
+                            <span class="change-emoji">⚡</span>
+                            <span class="change-text">
+                                <span class="change-type">Feature</span>
+                                <strong>NEW Block Duplicator!</strong> Makes next 2 pieces match your current falling piece (200 scraps)
+                            </span>
+                        </li>
+                        <li class="change-item bugfix">
+                            <span class="change-emoji">🔧</span>
+                            <span class="change-text">
+                                <span class="change-type bugfix">Fix</span>
+                                Enemy scaling properly balanced - 5% linear boost per level, 2.5% after level 10
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">📈</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Difficulty scaling halved after level 10 for more progression satisfaction
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Version 2.0 -->
+                <div class="version-card major">
+                    <div class="version-header">
+                        <div class="version-badge major">v2.0</div>
+                        <div class="version-title">💎 Scraps Economy Update</div>
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item feature">
+                            <span class="change-emoji">💎</span>
+                            <span class="change-text">
+                                <span class="change-type">Feature</span>
+                                <strong>NEW Scraps System!</strong> Earn scraps from line clears and enemy defeats
+                            </span>
+                        </li>
+                        <li class="change-item feature">
+                            <span class="change-emoji">💣</span>
+                            <span class="change-text">
+                                <span class="change-type">Feature</span>
+                                Buy explosive mines with scraps (60 scraps) - press Z or click button
+                            </span>
+                        </li>
+                        <li class="change-item feature">
+                            <span class="change-emoji">⬇️</span>
+                            <span class="change-text">
+                                <span class="change-type">Feature</span>
+                                Grid Shift power-up (100 scraps) - shifts all blocks down one row
+                            </span>
+                        </li>
+                        <li class="change-item buff">
+                            <span class="change-emoji">📈</span>
+                            <span class="change-text">
+                                <span class="change-type buff">Buff</span>
+                                Score and scraps increase by 30% per level (linear scaling for smoother progression)
+                            </span>
+                        </li>
+                        <li class="change-item buff">
+                            <span class="change-emoji">🌪️</span>
+                            <span class="change-text">
+                                <span class="change-type buff">Buff</span>
+                                S/Z slowing blocks effectiveness increased by 5%
+                            </span>
+                        </li>
+                        <li class="change-item nerf">
+                            <span class="change-emoji">💥</span>
+                            <span class="change-text">
+                                <span class="change-type nerf">Nerf</span>
+                                Mine damage slightly reduced due to easier acquisition method
+                            </span>
+                        </li>
+                        <li class="change-item nerf">
+                            <span class="change-emoji">📏</span>
+                            <span class="change-text">
+                                <span class="change-type nerf">Nerf</span>
+                                Mine explosion range reduced by 1 cell in all directions
+                            </span>
+                        </li>
+                        <li class="change-item balance">
+                            <span class="change-emoji">👾</span>
+                            <span class="change-text">
+                                <span class="change-type balance">Balance</span>
+                                Enemy health scaling reduced from 12% to 10% per level
+                            </span>
+                        </li>
+                        <li class="change-item balance">
+                            <span class="change-emoji">⚡</span>
+                            <span class="change-text">
+                                <span class="change-type balance">Balance</span>
+                                Gravity speed scaling changed from exponential to linear (30% per level)
+                            </span>
+                        </li>
+                        <li class="change-item feature">
+                            <span class="change-emoji">🧨</span>
+                            <span class="change-text">
+                                <span class="change-type">Feature</span>
+                                Mines now destroy adjacent blocks when exploding - prevents floating block issues
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">🎨</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Blue mortar blocks now fire blue projectiles and particles
+                            </span>
+                        </li>
+                        <li class="change-item buff">
+                            <span class="change-emoji">⛏️</span>
+                            <span class="change-text">
+                                <span class="change-type buff">Buff</span>
+                                Miner health increased by 20%, damage decreased by 33% - blocking more effective
+                            </span>
+                        </li>
+                        <li class="change-item bugfix">
+                            <span class="change-emoji">🔧</span>
+                            <span class="change-text">
+                                <span class="change-type bugfix">Fix</span>
+                                Line clearing calculation fixed for accurate scoring
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Version 1.6 -->
+                <div class="version-card minor">
+                    <div class="version-header">
+                        <div class="version-badge minor">v1.6</div>
+                        <div class="version-title">🔍 Visual Improvements</div>
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item qol">
+                            <span class="change-emoji">❤️</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Improved block health visualization for better readability
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">👁️</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Reduced S/Z block ring opacity by 25% to reduce visual clutter
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Version 1.5 -->
+                <div class="version-card minor">
+                    <div class="version-header">
+                        <div class="version-badge minor">v1.5</div>
+                        <div class="version-title">⛏️ Miner Boss Update</div>
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item feature">
+                            <span class="change-emoji">⛏️</span>
+                            <span class="change-text">
+                                <span class="change-type">Feature</span>
+                                <strong>NEW Miner Enemy!</strong> Mini-boss that appears every 5 waves with mining abilities
+                            </span>
+                        </li>
+                        <li class="change-item buff">
+                            <span class="change-emoji">🎯</span>
+                            <span class="change-text">
+                                <span class="change-type buff">Buff</span>
+                                Mortar projectile speed increased - bullets no longer too slow
+                            </span>
+                        </li>
+                        <li class="change-item nerf">
+                            <span class="change-emoji">💥</span>
+                            <span class="change-text">
+                                <span class="change-type nerf">Nerf</span>
+                                Mortar fire rate reduced by 10% to balance speed increase
+                            </span>
+                        </li>
+                        <li class="change-item buff">
+                            <span class="change-emoji">🌪️</span>
+                            <span class="change-text">
+                                <span class="change-type buff">Buff</span>
+                                S/Z slowing blocks effectiveness increased by 5%
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">🔫</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Projectiles are now 10% smaller for cleaner visuals
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="overview-section">
+                    <h3>🎮 Development Notes</h3>
+                    <p><strong>Focus on Balance:</strong> Recent updates prioritize smoother difficulty curves and player progression.</p>
+                    <p><strong>Quality of Life:</strong> Continuous improvements to controls, visuals, and user experience.</p>
+                    <p><strong>Strategic Depth:</strong> New mechanics like Helper blocks and the Scraps economy add layers of strategy.</p>
+                    <p><strong>Community Driven:</strong> Updates based on player feedback and testing for optimal game flow.</p>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -823,7 +1300,7 @@
         
         // Add hover effects to cards
         function initCardEffects() {
-            const cards = document.querySelectorAll('.item-card');
+            const cards = document.querySelectorAll('.item-card, .version-card');
             
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
@@ -898,7 +1375,7 @@
             
             // Add some random glow effects
             setInterval(() => {
-                const cards = document.querySelectorAll('.item-card');
+                const cards = document.querySelectorAll('.item-card, .version-card');
                 if (cards.length > 0) {
                     const randomCard = cards[Math.floor(Math.random() * cards.length)];
                     randomCard.style.boxShadow = '0 10px 30px rgba(66, 255, 255, 0.4)';
@@ -927,6 +1404,3 @@
     </script>
 </body>
 </html>
-
-
-
