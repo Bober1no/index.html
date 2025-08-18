@@ -114,15 +114,16 @@
         }
 
         .header h1 {
-            font-size: 3em;
+            font-size: 2.5em;
             margin-bottom: 10px;
-            letter-spacing: 3px;
-            animation: pulse 2s ease-in-out infinite;
+            letter-spacing: 2px;
+            animation: pulse 4s ease-in-out infinite;
+            white-space: nowrap;
         }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.02); }
         }
 
         .header p {
@@ -271,6 +272,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .score-entry::before {
@@ -314,37 +316,9 @@
             flex: 1;
             margin: 0 20px;
             font-size: 1.4em;
-            cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             display: inline-block;
-        }
-
-        .player:hover {
-            color: #4a6fff;
-            text-shadow: 0 0 10px rgba(74, 111, 255, 0.5);
-            transform: scale(1.05);
-        }
-
-        .player::after {
-            content: '👁️ View Profile';
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(74, 111, 255, 0.9);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.7em;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
-        .player:hover::after {
-            opacity: 1;
         }
 
         .score {
@@ -425,6 +399,10 @@
             align-items: center;
         }
 
+        .modal.closing {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
         .modal-content {
             background: linear-gradient(135deg, #1a0f2e 0%, #2a1540 100%);
             border-radius: 20px;
@@ -437,6 +415,10 @@
             position: relative;
         }
 
+        .modal.closing .modal-content {
+            animation: slideDown 0.5s ease forwards;
+        }
+
         @keyframes slideUp {
             from { 
                 opacity: 0;
@@ -445,6 +427,26 @@
             to { 
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+        }
+
+        @keyframes fadeOut {
+            from { 
+                opacity: 1;
+            }
+            to { 
+                opacity: 0;
             }
         }
 
@@ -527,14 +529,38 @@
             background: rgba(60, 45, 90, 0.7);
         }
 
-        .profile-score-version {
-            color: #4a6fff;
+        .profile-score-mode {
+            color: #b0b0d0;
+            font-size: 1em;
             font-weight: bold;
         }
 
-        .profile-score-mode {
-            color: #b0b0d0;
+        .profile-score-version {
+            color: #4a6fff;
+            font-weight: bold;
             font-size: 0.9em;
+            margin-left: 8px;
+        }
+
+        .profile-score-rank {
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+
+        .profile-score-rank.rank-1 {
+            color: #ffd700;
+        }
+
+        .profile-score-rank.rank-2 {
+            color: #c0c0c0;
+        }
+
+        .profile-score-rank.rank-3 {
+            color: #cd7f32;
+        }
+
+        .profile-score-rank.rank-other {
+            color: #42ff66;
         }
 
         .profile-score-value {
@@ -548,7 +574,8 @@
 
         @media (max-width: 600px) {
             .header h1 {
-                font-size: 2em;
+                font-size: 1.8em;
+                letter-spacing: 1px;
             }
             
             .tab {
@@ -569,10 +596,6 @@
             
             .rank, .player, .score {
                 margin: 0;
-            }
-            
-            .player::after {
-                display: none;
             }
         }
     </style>
@@ -602,19 +625,19 @@
                         ═══ COMPETITIVE LEADERBOARD (v2.5) ═══
                     </div>
                     <div class="leaderboard">
-                        <div class="score-entry">
+                        <div class="score-entry" onclick="showProfile('Aarav')">
                             <div class="rank"><span class="medal">🥇</span>#1</div>
-                            <div class="player" onclick="showProfile('Aarav')">Aarav</div>
+                            <div class="player">Aarav</div>
                             <div class="score">7,160</div>
                         </div>
-                        <div class="score-entry">
+                        <div class="score-entry" onclick="showProfile('Ben')">
                             <div class="rank"><span class="medal">🥈</span>#2</div>
-                            <div class="player" onclick="showProfile('Ben')">Ben</div>
+                            <div class="player">Ben</div>
                             <div class="score">5,726</div>
                         </div>
-                        <div class="score-entry">
+                        <div class="score-entry" onclick="showProfile('Christian')">
                             <div class="rank"><span class="medal">🥉</span>#3</div>
-                            <div class="player" onclick="showProfile('Christian')">Christian</div>
+                            <div class="player">Christian</div>
                             <div class="score">4,600</div>
                         </div>
                     </div>
@@ -625,9 +648,9 @@
                         ⚡ POWER SAVING MODE (v2.5) ⚡
                     </div>
                     <div class="leaderboard">
-                        <div class="score-entry">
+                        <div class="score-entry" onclick="showProfile('Viraal')">
                             <div class="rank">📊 #1</div>
-                            <div class="player" onclick="showProfile('Viraal')">Viraal</div>
+                            <div class="player">Viraal</div>
                             <div class="score">12,867</div>
                         </div>
                     </div>
@@ -695,19 +718,19 @@
                         ═══ ALL-TIME COMPETITIVE RECORDS ═══
                     </div>
                     <div class="leaderboard">
-                        <div class="score-entry">
+                        <div class="score-entry" onclick="showProfile('Aarav')">
                             <div class="rank"><span class="medal">🥇</span>#1</div>
-                            <div class="player" onclick="showProfile('Aarav')">Aarav <span style="opacity: 0.6;">(v2.5)</span></div>
+                            <div class="player">Aarav <span style="opacity: 0.6;">(v2.5)</span></div>
                             <div class="score">7,160</div>
                         </div>
-                        <div class="score-entry">
+                        <div class="score-entry" onclick="showProfile('Ben')">
                             <div class="rank"><span class="medal">🥈</span>#2</div>
-                            <div class="player" onclick="showProfile('Ben')">Ben <span style="opacity: 0.6;">(v2.5)</span></div>
+                            <div class="player">Ben <span style="opacity: 0.6;">(v2.5)</span></div>
                             <div class="score">5,726</div>
                         </div>
-                        <div class="score-entry">
+                        <div class="score-entry" onclick="showProfile('Christian')">
                             <div class="rank"><span class="medal">🥉</span>#3</div>
-                            <div class="player" onclick="showProfile('Christian')">Christian <span style="opacity: 0.6;">(v2.5)</span></div>
+                            <div class="player">Christian <span style="opacity: 0.6;">(v2.5)</span></div>
                             <div class="score">4,600</div>
                         </div>
                     </div>
@@ -718,9 +741,9 @@
                         ⚡ ALL-TIME POWER SAVING RECORDS ⚡
                     </div>
                     <div class="leaderboard">
-                        <div class="score-entry">
+                        <div class="score-entry" onclick="showProfile('Viraal')">
                             <div class="rank">📊 #1</div>
-                            <div class="player" onclick="showProfile('Viraal')">Viraal <span style="opacity: 0.6;">(v2.5)</span></div>
+                            <div class="player">Viraal <span style="opacity: 0.6;">(v2.5)</span></div>
                             <div class="score">12,867</div>
                         </div>
                     </div>
@@ -820,16 +843,23 @@
                 document.getElementById('highestScore').textContent = highestScore.toLocaleString();
                 document.getElementById('avgRank').textContent = `#${avgRank}`;
                 
-                // Build score history
-                const historyHtml = player.scores.map(s => `
-                    <div class="profile-score-item">
-                        <div>
-                            <div class="profile-score-version">${s.version}</div>
-                            <div class="profile-score-mode">${s.mode}</div>
+                // Build score history with rank information
+                const historyHtml = player.scores.map(s => {
+                    let rankClass = 'rank-other';
+                    if (s.rank === 1) rankClass = 'rank-1';
+                    else if (s.rank === 2) rankClass = 'rank-2';
+                    else if (s.rank === 3) rankClass = 'rank-3';
+                    
+                    return `
+                        <div class="profile-score-item">
+                            <div>
+                                <div class="profile-score-mode">${s.mode} <span class="profile-score-version">(${s.version})</span></div>
+                                <div class="profile-score-rank ${rankClass}">🏆 Rank #${s.rank}</div>
+                            </div>
+                            <div class="profile-score-value">${s.score.toLocaleString()}</div>
                         </div>
-                        <div class="profile-score-value">${s.score.toLocaleString()}</div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
                 
                 document.getElementById('scoreHistory').innerHTML = historyHtml;
                 
@@ -840,14 +870,19 @@
 
         function closeProfile() {
             const modal = document.getElementById('profileModal');
-            modal.classList.remove('show');
+            modal.classList.add('closing');
+            
+            // Hide modal after animation completes
+            setTimeout(() => {
+                modal.classList.remove('show', 'closing');
+            }, 500);
         }
 
         // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('profileModal');
             if (event.target == modal) {
-                modal.classList.remove('show');
+                closeProfile();
             }
         }
 
