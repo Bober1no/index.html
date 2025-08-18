@@ -12,76 +12,180 @@
         }
 
         body {
-            font-family: 'Consolas', 'Monaco', monospace;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a0f2e 50%, #0a0a0f 100%);
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0f2e 25%, #2a1540 50%, #1a0f2e 75%, #0a0a0f 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             color: #e0e0f0;
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            background: rgba(20, 14, 30, 0.9);
-            border-radius: 15px;
-            border: 2px solid #4a6fff;
-            box-shadow: 0 0 30px rgba(74, 111, 255, 0.3);
+            background: rgba(20, 14, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            z-index: 1;
             overflow: hidden;
+            box-shadow: 
+                0 0 50px rgba(74, 111, 255, 0.3),
+                inset 0 0 20px rgba(255, 90, 255, 0.1);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { 
+                border-color: #4a6fff;
+                box-shadow: 
+                    0 0 50px rgba(74, 111, 255, 0.3),
+                    inset 0 0 20px rgba(255, 90, 255, 0.1);
+            }
+            50% { 
+                border-color: #ff5aff;
+                box-shadow: 
+                    0 0 50px rgba(255, 90, 255, 0.3),
+                    inset 0 0 20px rgba(74, 111, 255, 0.1);
+            }
         }
 
         .header {
             text-align: center;
-            padding: 30px 20px;
-            background: linear-gradient(90deg, #4a6fff 0%, #ff5aff 100%);
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #4a6fff 0%, #ff5aff 50%, #4a6fff 100%);
+            background-size: 200% 200%;
+            animation: headerGradient 5s ease infinite;
             color: white;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+
+        @keyframes headerGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .header h1 {
-            font-size: 2.5em;
+            font-size: 3em;
             margin-bottom: 10px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .header p {
             font-size: 1.2em;
-            opacity: 0.9;
+            opacity: 0.95;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 0.95; transform: translateY(0); }
         }
 
         .tabs {
             display: flex;
-            background: rgba(30, 20, 45, 0.8);
+            background: rgba(30, 20, 45, 0.9);
             border-bottom: 2px solid #4a6fff;
+            position: relative;
         }
 
         .tab {
             flex: 1;
-            padding: 15px 20px;
+            padding: 18px 20px;
             text-align: center;
             cursor: pointer;
             background: transparent;
             border: none;
             color: #b0b0d0;
             font-family: inherit;
-            font-size: 1.1em;
+            font-size: 1.15em;
             font-weight: bold;
             transition: all 0.3s ease;
-            border-right: 1px solid rgba(74, 111, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .tab:last-child {
-            border-right: none;
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tab:hover::before {
+            left: 100%;
         }
 
         .tab:hover {
             background: rgba(74, 111, 255, 0.2);
             color: #ffffff;
+            transform: translateY(-2px);
         }
 
         .tab.active {
-            background: #4a6fff;
+            background: linear-gradient(135deg, #4a6fff 0%, #6a8fff 100%);
             color: white;
-            box-shadow: 0 0 15px rgba(74, 111, 255, 0.5);
+            box-shadow: 
+                0 0 20px rgba(74, 111, 255, 0.5),
+                inset 0 -3px 10px rgba(0, 0, 0, 0.2);
         }
 
         .content {
@@ -90,6 +194,12 @@
 
         .version-content {
             display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .version-content.active {
@@ -101,45 +211,87 @@
         }
 
         .leaderboard-title {
-            font-size: 1.5em;
+            font-size: 1.6em;
             margin-bottom: 20px;
             text-align: center;
-            padding: 15px;
-            background: linear-gradient(90deg, rgba(74, 111, 255, 0.2) 0%, rgba(255, 90, 255, 0.2) 100%);
-            border-radius: 10px;
-            border: 1px solid #4a6fff;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(74, 111, 255, 0.3) 0%, rgba(255, 90, 255, 0.3) 100%);
+            border-radius: 15px;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
-        .competitive {
-            color: #42ff66;
+        .leaderboard-title::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s ease-in-out infinite;
         }
 
-        .power-saving {
-            color: #ffaa42;
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .competitive .leaderboard-title {
+            border-color: #42ff66;
+            background: linear-gradient(135deg, rgba(66, 255, 102, 0.2) 0%, rgba(74, 111, 255, 0.2) 100%);
+        }
+
+        .power-saving .leaderboard-title {
+            border-color: #ffaa42;
+            background: linear-gradient(135deg, rgba(255, 170, 66, 0.2) 0%, rgba(255, 90, 255, 0.2) 100%);
         }
 
         .leaderboard {
-            background: rgba(40, 30, 60, 0.6);
-            border-radius: 10px;
+            background: rgba(40, 30, 60, 0.7);
+            border-radius: 15px;
             padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
         }
 
         .score-entry {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            background: rgba(60, 45, 90, 0.4);
-            border-radius: 8px;
-            border-left: 4px solid;
+            padding: 15px 18px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, rgba(60, 45, 90, 0.5) 0%, rgba(80, 60, 120, 0.5) 100%);
+            border-radius: 12px;
+            border-left: 5px solid;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-entry::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .score-entry:hover::before {
+            left: 100%;
         }
 
         .score-entry:hover {
-            background: rgba(80, 60, 120, 0.6);
-            transform: translateX(5px);
+            background: linear-gradient(135deg, rgba(80, 60, 120, 0.7) 0%, rgba(100, 80, 140, 0.7) 100%);
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 0 5px 20px rgba(74, 111, 255, 0.3);
         }
 
         .competitive .score-entry {
@@ -151,9 +303,9 @@
         }
 
         .rank {
-            font-size: 1.4em;
+            font-size: 1.5em;
             font-weight: bold;
-            min-width: 60px;
+            min-width: 70px;
             display: flex;
             align-items: center;
         }
@@ -161,40 +313,237 @@
         .player {
             flex: 1;
             margin: 0 20px;
-            font-size: 1.3em;
+            font-size: 1.4em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        .player:hover {
+            color: #4a6fff;
+            text-shadow: 0 0 10px rgba(74, 111, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .player::after {
+            content: '👁️ View Profile';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(74, 111, 255, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.7em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .player:hover::after {
+            opacity: 1;
         }
 
         .score {
-            font-size: 1.3em;
+            font-size: 1.4em;
             font-weight: bold;
             color: #ffffff;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, #4a6fff 0%, #ff5aff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .medal {
-            font-size: 1.8em;
+            font-size: 2em;
             margin-right: 10px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .empty-leaderboard {
             text-align: center;
-            padding: 40px;
+            padding: 60px;
             color: #888;
             font-style: italic;
+            font-size: 1.2em;
+            opacity: 0.7;
         }
 
         .warning-notice {
-            background: linear-gradient(135deg, rgba(255, 90, 110, 0.1) 0%, rgba(255, 150, 50, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(255, 90, 110, 0.2) 0%, rgba(255, 150, 50, 0.2) 100%);
             border: 2px solid #ff5a6e;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            color: #ff5a6e;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            color: #ff8a9e;
+            position: relative;
+            overflow: hidden;
+            animation: warningPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(255, 90, 110, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(255, 90, 110, 0.5);
+            }
         }
 
         .warning-notice h3 {
             margin-bottom: 10px;
             color: #ffffff;
+            font-size: 1.3em;
+        }
+
+        /* Player Profile Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a0f2e 0%, #2a1540 100%);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid #4a6fff;
+            box-shadow: 0 0 50px rgba(74, 111, 255, 0.5);
+            animation: slideUp 0.5s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(74, 111, 255, 0.3);
+        }
+
+        .modal-header h2 {
+            font-size: 2em;
+            background: linear-gradient(135deg, #4a6fff 0%, #ff5aff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #ff5a6e;
+            transform: rotate(90deg);
+        }
+
+        .profile-stats {
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(60, 45, 90, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4a6fff;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(80, 60, 120, 0.6);
+            transform: translateX(5px);
+        }
+
+        .stat-label {
+            color: #b0b0d0;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .profile-scores {
+            margin-top: 20px;
+        }
+
+        .profile-score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(40, 30, 60, 0.6);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-score-item:hover {
+            background: rgba(60, 45, 90, 0.7);
+        }
+
+        .profile-score-version {
+            color: #4a6fff;
+            font-weight: bold;
+        }
+
+        .profile-score-mode {
+            color: #b0b0d0;
+            font-size: 0.9em;
+        }
+
+        .profile-score-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #42ff66 0%, #4a6fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         @media (max-width: 600px) {
@@ -203,7 +552,7 @@
             }
             
             .tab {
-                padding: 12px 10px;
+                padding: 15px 10px;
                 font-size: 1em;
             }
             
@@ -214,16 +563,24 @@
             .score-entry {
                 flex-direction: column;
                 text-align: center;
-                gap: 8px;
+                gap: 10px;
+                padding: 20px;
             }
             
             .rank, .player, .score {
                 margin: 0;
             }
+            
+            .player::after {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
         <div class="header">
             <h1>🏆 BLOCK SHOTS LEADERBOARDS 🏆</h1>
@@ -247,17 +604,17 @@
                     <div class="leaderboard">
                         <div class="score-entry">
                             <div class="rank"><span class="medal">🥇</span>#1</div>
-                            <div class="player">Aarav</div>
+                            <div class="player" onclick="showProfile('Aarav')">Aarav</div>
                             <div class="score">7,160</div>
                         </div>
                         <div class="score-entry">
                             <div class="rank"><span class="medal">🥈</span>#2</div>
-                            <div class="player">Ben</div>
+                            <div class="player" onclick="showProfile('Ben')">Ben</div>
                             <div class="score">5,726</div>
                         </div>
                         <div class="score-entry">
                             <div class="rank"><span class="medal">🥉</span>#3</div>
-                            <div class="player">Christian</div>
+                            <div class="player" onclick="showProfile('Christian')">Christian</div>
                             <div class="score">4,600</div>
                         </div>
                     </div>
@@ -270,7 +627,7 @@
                     <div class="leaderboard">
                         <div class="score-entry">
                             <div class="rank">📊 #1</div>
-                            <div class="player">Viraal</div>
+                            <div class="player" onclick="showProfile('Viraal')">Viraal</div>
                             <div class="score">12,867</div>
                         </div>
                     </div>
@@ -285,7 +642,8 @@
                     </div>
                     <div class="leaderboard">
                         <div class="empty-leaderboard">
-                            No scores recorded yet for v2.6
+                            🎮 No scores recorded yet for v2.6<br>
+                            Be the first to claim the throne!
                         </div>
                     </div>
                 </div>
@@ -296,7 +654,8 @@
                     </div>
                     <div class="leaderboard">
                         <div class="empty-leaderboard">
-                            No scores recorded yet for v2.6
+                            🎮 No scores recorded yet for v2.6<br>
+                            Be the first to claim the throne!
                         </div>
                     </div>
                 </div>
@@ -310,7 +669,8 @@
                     </div>
                     <div class="leaderboard">
                         <div class="empty-leaderboard">
-                            No scores recorded yet for v3.0
+                            🎮 No scores recorded yet for v3.0<br>
+                            Be the first to claim the throne!
                         </div>
                     </div>
                 </div>
@@ -321,7 +681,8 @@
                     </div>
                     <div class="leaderboard">
                         <div class="empty-leaderboard">
-                            No scores recorded yet for v3.0
+                            🎮 No scores recorded yet for v3.0<br>
+                            Be the first to claim the throne!
                         </div>
                     </div>
                 </div>
@@ -336,17 +697,17 @@
                     <div class="leaderboard">
                         <div class="score-entry">
                             <div class="rank"><span class="medal">🥇</span>#1</div>
-                            <div class="player">Aarav <span style="opacity: 0.6;">(v2.5)</span></div>
+                            <div class="player" onclick="showProfile('Aarav')">Aarav <span style="opacity: 0.6;">(v2.5)</span></div>
                             <div class="score">7,160</div>
                         </div>
                         <div class="score-entry">
                             <div class="rank"><span class="medal">🥈</span>#2</div>
-                            <div class="player">Ben <span style="opacity: 0.6;">(v2.5)</span></div>
+                            <div class="player" onclick="showProfile('Ben')">Ben <span style="opacity: 0.6;">(v2.5)</span></div>
                             <div class="score">5,726</div>
                         </div>
                         <div class="score-entry">
                             <div class="rank"><span class="medal">🥉</span>#3</div>
-                            <div class="player">Christian <span style="opacity: 0.6;">(v2.5)</span></div>
+                            <div class="player" onclick="showProfile('Christian')">Christian <span style="opacity: 0.6;">(v2.5)</span></div>
                             <div class="score">4,600</div>
                         </div>
                     </div>
@@ -359,7 +720,7 @@
                     <div class="leaderboard">
                         <div class="score-entry">
                             <div class="rank">📊 #1</div>
-                            <div class="player">Viraal <span style="opacity: 0.6;">(v2.5)</span></div>
+                            <div class="player" onclick="showProfile('Viraal')">Viraal <span style="opacity: 0.6;">(v2.5)</span></div>
                             <div class="score">12,867</div>
                         </div>
                     </div>
@@ -373,7 +734,59 @@
         </div>
     </div>
 
+    <!-- Player Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeProfile()">×</span>
+            <div class="modal-header">
+                <h2 id="profileName">Player Profile</h2>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Total Games Played</div>
+                    <div class="stat-value" id="totalGames">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Highest Score</div>
+                    <div class="stat-value" id="highestScore">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Average Rank</div>
+                    <div class="stat-value" id="avgRank">#0</div>
+                </div>
+            </div>
+            <div class="profile-scores">
+                <h3 style="color: #4a6fff; margin-bottom: 15px;">📊 Score History</h3>
+                <div id="scoreHistory"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Player data
+        const playerData = {
+            'Aarav': {
+                scores: [
+                    { version: 'v2.5', mode: 'Competitive', score: 7160, rank: 1 }
+                ]
+            },
+            'Ben': {
+                scores: [
+                    { version: 'v2.5', mode: 'Competitive', score: 5726, rank: 2 }
+                ]
+            },
+            'Christian': {
+                scores: [
+                    { version: 'v2.5', mode: 'Competitive', score: 4600, rank: 3 }
+                ]
+            },
+            'Viraal': {
+                scores: [
+                    { version: 'v2.5', mode: 'Power Saving', score: 12867, rank: 1 }
+                ]
+            }
+        };
+
         function showVersion(version) {
             // Hide all content
             const contents = document.querySelectorAll('.version-content');
@@ -390,19 +803,74 @@
             event.target.classList.add('active');
         }
 
-        // Add hover effects and animations
+        function showProfile(playerName) {
+            const modal = document.getElementById('profileModal');
+            const player = playerData[playerName];
+            
+            if (player) {
+                // Set player name
+                document.getElementById('profileName').textContent = `🎮 ${playerName}'s Profile`;
+                
+                // Calculate stats
+                const totalGames = player.scores.length;
+                const highestScore = Math.max(...player.scores.map(s => s.score));
+                const avgRank = Math.round(player.scores.reduce((sum, s) => sum + s.rank, 0) / totalGames);
+                
+                document.getElementById('totalGames').textContent = totalGames;
+                document.getElementById('highestScore').textContent = highestScore.toLocaleString();
+                document.getElementById('avgRank').textContent = `#${avgRank}`;
+                
+                // Build score history
+                const historyHtml = player.scores.map(s => `
+                    <div class="profile-score-item">
+                        <div>
+                            <div class="profile-score-version">${s.version}</div>
+                            <div class="profile-score-mode">${s.mode}</div>
+                        </div>
+                        <div class="profile-score-value">${s.score.toLocaleString()}</div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('scoreHistory').innerHTML = historyHtml;
+                
+                // Show modal
+                modal.classList.add('show');
+            }
+        }
+
+        function closeProfile() {
+            const modal = document.getElementById('profileModal');
+            modal.classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('profileModal');
+            if (event.target == modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        // Create floating particles
         document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+
+            // Add entrance animation to score entries
             const scoreEntries = document.querySelectorAll('.score-entry');
-            scoreEntries.forEach(entry => {
-                entry.addEventListener('mouseenter', function() {
-                    this.style.boxShadow = '0 5px 15px rgba(74, 111, 255, 0.3)';
-                });
-                entry.addEventListener('mouseleave', function() {
-                    this.style.boxShadow = 'none';
-                });
+            scoreEntries.forEach((entry, index) => {
+                entry.style.animation = `slideIn 0.5s ease-out ${index * 0.1}s both`;
             });
         });
     </script>
 </body>
 </html>
-
