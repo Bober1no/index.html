@@ -41,28 +41,14 @@
 
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.5);
+            background: #fff;
             border-radius: 50%;
-            animation: float 20s linear infinite;
+            animation: twinkle 3s infinite ease-in-out;
         }
 
-        @keyframes float {
-            from {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-100vh) translateX(100px);
-                opacity: 0;
-            }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
         .nav-button {
@@ -691,7 +677,7 @@
                         <div class="score-entry" onclick="showProfile('Ben')">
                             <div class="rank"><span class="medal">🥈</span>#2</div>
                             <div class="player">Ben</div>
-                            <div class="score">6,172</div>
+                            <div class="score">5,726</div>
                         </div>
                         <div class="score-entry" onclick="showProfile('Christian')">
                             <div class="rank"><span class="medal">🥉</span>#3</div>
@@ -953,8 +939,11 @@
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 3 + 1 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 0.5 + 's'; // Changed from 20s to 0.5s
+                particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 particlesContainer.appendChild(particle);
             }
 
@@ -964,7 +953,14 @@
                 entry.style.animation = `slideIn 0.5s ease-out ${index * 0.1}s both`;
             });
         });
+
+        // Parallax scrolling effect for particles
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            const particles = document.getElementById('particles');
+            particles.style.transform = `translateY(${rate}px)`;
+        });
     </script>
 </body>
 </html>
-
