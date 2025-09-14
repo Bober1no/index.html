@@ -282,6 +282,11 @@
             background: linear-gradient(135deg, rgba(255, 170, 66, 0.2) 0%, rgba(255, 90, 255, 0.2) 100%);
         }
 
+        .wave-leaderboard .leaderboard-title {
+            border-color: #ff42ff;
+            background: linear-gradient(135deg, rgba(255, 66, 255, 0.2) 0%, rgba(255, 170, 66, 0.2) 100%);
+        }
+
         .leaderboard {
             background: rgba(40, 30, 60, 0.7);
             border-radius: 15px;
@@ -332,6 +337,10 @@
 
         .power-saving .score-entry {
             border-left-color: #ffaa42;
+        }
+
+        .wave-leaderboard .score-entry {
+            border-left-color: #ff42ff;
         }
 
         .rank {
@@ -692,6 +701,10 @@
                     <div class="stat-value" id="highestScore">0</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-label">Highest Wave (v3.0)</div>
+                    <div class="stat-value" id="highestWave">0</div>
+                </div>
+                <div class="stat-card">
                     <div class="stat-label">Average Rank</div>
                     <div class="stat-value" id="avgRank">#0</div>
                 </div>
@@ -754,6 +767,13 @@ const gameData = {
     
 };
 
+// ========================================
+// WAVE DATA FOR v3.0 - Add your wave records here!
+// ========================================
+const waveData = {
+    
+};
+
         // ========================================
         // Dynamic System - Automatically calculates everything
         // ========================================
@@ -795,6 +815,37 @@ const gameData = {
             }));
         }
 
+        // Function to calculate wave rankings for v3.0
+        function calculateWaveRankings(mode) {
+            const waves = [];
+            
+            // Collect all wave data for this mode
+            for (const [player, playerWaves] of Object.entries(waveData)) {
+                const playerWave = playerWaves.find(w => w.mode === mode);
+                if (playerWave) {
+                    waves.push({
+                        player: player,
+                        wave: playerWave.wave,
+                        score: playerWave.score,
+                        version: 'v3.0',
+                        mode: mode
+                    });
+                }
+            }
+            
+            // Sort by wave (highest first), then by score as tiebreaker
+            waves.sort((a, b) => {
+                if (b.wave !== a.wave) return b.wave - a.wave;
+                return b.score - a.score;
+            });
+            
+            // Add rankings
+            return waves.map((entry, index) => ({
+                ...entry,
+                rank: index + 1
+            }));
+        }
+
         // Function to calculate all-time rankings for a specific mode
         function calculateAllTimeRankings(mode) {
             const scores = [];
@@ -824,11 +875,11 @@ const gameData = {
         }
 
         // Function to generate leaderboard HTML
-        function generateLeaderboardHTML(rankings, showVersion = false) {
+        function generateLeaderboardHTML(rankings, showVersion = false, isWaveBoard = false) {
             if (rankings.length === 0) {
                 return `
                     <div class="empty-leaderboard">
-                        Version 3.1 is going to be the last update of the game! 🎮
+                        ${isWaveBoard ? "No wave data available yet! 🌊" : "Version 3.1 is going to be the last update of the game! (10% chance could go to V3.5) 🎮"}
                     </div>
                 `;
             }
@@ -836,12 +887,13 @@ const gameData = {
             return rankings.map(entry => {
                 const medal = getMedal(entry.rank);
                 const versionText = showVersion ? ` <span style="opacity: 0.6;">(${entry.version})</span>` : '';
+                const displayValue = isWaveBoard ? `Wave ${entry.wave}` : entry.score.toLocaleString();
                 
                 return `
                     <div class="score-entry" onclick="showProfile('${entry.player}')">
                         <div class="rank">${medal ? `<span class="medal">${medal}</span>` : ''}#${entry.rank}</div>
                         <div class="player">${entry.player}${versionText}</div>
-                        <div class="score">${entry.score.toLocaleString()}</div>
+                        <div class="score">${displayValue}</div>
                     </div>
                 `;
             }).join('');
@@ -849,7 +901,51 @@ const gameData = {
 
         // Function to generate version content
         function generateVersionContent(version) {
-            if (version === 'all-time') {
+            if (version === 'v3.0') {
+                // v3.0 has both score and wave leaderboards
+                const competitiveRankings = calculateRankings(version, 'competitive');
+                const powerSavingRankings = calculateRankings(version, 'power-saving');
+                const competitiveWaves = calculateWaveRankings('competitive');
+                const powerSavingWaves = calculateWaveRankings('power-saving');
+                
+                return `
+                    <div class="leaderboard-section competitive">
+                        <div class="leaderboard-title competitive">
+                            ═══ COMPETITIVE SCORES (v3.0) ═══
+                        </div>
+                        <div class="leaderboard">
+                            ${generateLeaderboardHTML(competitiveRankings)}
+                        </div>
+                    </div>
+
+                    <div class="leaderboard-section power-saving">
+                        <div class="leaderboard-title power-saving">
+                            ⚡ POWER SAVING SCORES (v3.0) ⚡
+                        </div>
+                        <div class="leaderboard">
+                            ${generateLeaderboardHTML(powerSavingRankings)}
+                        </div>
+                    </div>
+
+                    <div class="leaderboard-section wave-leaderboard">
+                        <div class="leaderboard-title">
+                            🌊 HIGHEST WAVES - COMPETITIVE 🌊
+                        </div>
+                        <div class="leaderboard">
+                            ${generateLeaderboardHTML(competitiveWaves, false, true)}
+                        </div>
+                    </div>
+
+                    <div class="leaderboard-section wave-leaderboard">
+                        <div class="leaderboard-title">
+                            🌊 HIGHEST WAVES - POWER SAVING 🌊
+                        </div>
+                        <div class="leaderboard">
+                            ${generateLeaderboardHTML(powerSavingWaves, false, true)}
+                        </div>
+                    </div>
+                `;
+            } else if (version === 'all-time') {
                 const competitiveRankings = calculateAllTimeRankings('competitive');
                 const powerSavingRankings = calculateAllTimeRankings('power-saving');
                 
@@ -904,7 +1000,8 @@ const gameData = {
             
             for (const [playerName, scores] of Object.entries(gameData)) {
                 playerData[playerName] = {
-                    scores: []
+                    scores: [],
+                    waves: []
                 };
                 
                 // Calculate rankings for each score
@@ -921,6 +1018,24 @@ const gameData = {
                         });
                     }
                 });
+
+                // Add wave data if player has it
+                if (waveData[playerName]) {
+                    waveData[playerName].forEach(waveEntry => {
+                        const waveRankings = calculateWaveRankings(waveEntry.mode);
+                        const playerWaveRanking = waveRankings.find(r => r.player === playerName);
+                        
+                        if (playerWaveRanking) {
+                            playerData[playerName].waves.push({
+                                version: waveEntry.version,
+                                mode: waveEntry.mode === 'competitive' ? 'Competitive' : 'Power Saving',
+                                wave: waveEntry.wave,
+                                score: waveEntry.score,
+                                rank: playerWaveRanking.rank
+                            });
+                        }
+                    });
+                }
             }
             
             return playerData;
@@ -967,34 +1082,73 @@ const gameData = {
                 
                 // Calculate stats
                 const totalGames = player.scores.length;
-                const highestScore = Math.max(...player.scores.map(s => s.score));
-                const avgRank = Math.round(player.scores.reduce((sum, s) => sum + s.rank, 0) / totalGames);
+                const highestScore = player.scores.length > 0 ? Math.max(...player.scores.map(s => s.score)) : 0;
+                const highestWave = player.waves.length > 0 ? Math.max(...player.waves.map(w => w.wave)) : 0;
+                const avgRank = totalGames > 0 ? Math.round(player.scores.reduce((sum, s) => sum + s.rank, 0) / totalGames) : 0;
                 
                 document.getElementById('totalGames').textContent = totalGames;
                 document.getElementById('highestScore').textContent = highestScore.toLocaleString();
-                document.getElementById('avgRank').textContent = `#${avgRank}`;
+                document.getElementById('highestWave').textContent = highestWave > 0 ? highestWave : 'N/A';
+                document.getElementById('avgRank').textContent = avgRank > 0 ? `#${avgRank}` : 'N/A';
                 
-                // Build score history with rank information - sort by score descending
-                const historyHtml = player.scores
-                    .sort((a, b) => b.score - a.score)
-                    .map(s => {
-                        let rankClass = 'rank-other';
-                        if (s.rank === 1) rankClass = 'rank-1';
-                        else if (s.rank === 2) rankClass = 'rank-2';
-                        else if (s.rank === 3) rankClass = 'rank-3';
-                        
-                        return `
-                            <div class="profile-score-item">
-                                <div>
-                                    <div class="profile-score-mode">${s.mode} <span class="profile-score-version">(${s.version})</span></div>
-                                    <div class="profile-score-rank ${rankClass}">🏆 Rank #${s.rank}</div>
-                                </div>
-                                <div class="profile-score-value">${s.score.toLocaleString()}</div>
+                // Build combined history with both scores and waves
+                let historyItems = [];
+                
+                // Add score entries
+                player.scores.forEach(s => {
+                    let rankClass = 'rank-other';
+                    if (s.rank === 1) rankClass = 'rank-1';
+                    else if (s.rank === 2) rankClass = 'rank-2';
+                    else if (s.rank === 3) rankClass = 'rank-3';
+                    
+                    historyItems.push({
+                        type: 'score',
+                        version: s.version,
+                        mode: s.mode,
+                        value: s.score.toLocaleString(),
+                        displayValue: s.score.toLocaleString(),
+                        rank: s.rank,
+                        rankClass: rankClass,
+                        sortValue: s.score
+                    });
+                });
+
+                // Add wave entries
+                player.waves.forEach(w => {
+                    let rankClass = 'rank-other';
+                    if (w.rank === 1) rankClass = 'rank-1';
+                    else if (w.rank === 2) rankClass = 'rank-2';
+                    else if (w.rank === 3) rankClass = 'rank-3';
+                    
+                    historyItems.push({
+                        type: 'wave',
+                        version: w.version,
+                        mode: w.mode,
+                        value: `Wave ${w.wave}`,
+                        displayValue: `Wave ${w.wave}`,
+                        rank: w.rank,
+                        rankClass: rankClass,
+                        sortValue: w.wave * 10000 + w.score // Sort by wave first, then score
+                    });
+                });
+
+                // Sort all items by their sortValue (highest first)
+                historyItems.sort((a, b) => b.sortValue - a.sortValue);
+                
+                const historyHtml = historyItems.map(item => {
+                    const typeIcon = item.type === 'wave' ? '🌊' : '🎯';
+                    return `
+                        <div class="profile-score-item">
+                            <div>
+                                <div class="profile-score-mode">${typeIcon} ${item.mode} <span class="profile-score-version">(${item.version})</span></div>
+                                <div class="profile-score-rank ${item.rankClass}">🏆 Rank #${item.rank}</div>
                             </div>
-                        `;
-                    }).join('');
+                            <div class="profile-score-value">${item.displayValue}</div>
+                        </div>
+                    `;
+                }).join('');
                 
-                document.getElementById('scoreHistory').innerHTML = historyHtml;
+                document.getElementById('scoreHistory').innerHTML = historyHtml || '<div style="text-align: center; color: #888; padding: 20px;">No data available</div>';
                 
                 // Show modal
                 modal.classList.add('show');
@@ -1059,30 +1213,3 @@ const gameData = {
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
