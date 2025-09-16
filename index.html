@@ -287,6 +287,11 @@
             background: linear-gradient(135deg, rgba(255, 66, 255, 0.2) 0%, rgba(255, 170, 66, 0.2) 100%);
         }
 
+        .wave-leaderboard.power-saving .leaderboard-title {
+            border-color: #ff4242;
+            background: linear-gradient(135deg, rgba(255, 66, 66, 0.2) 0%, rgba(255, 102, 42, 0.2) 100%);
+        }
+
         .leaderboard {
             background: rgba(40, 30, 60, 0.7);
             border-radius: 15px;
@@ -341,6 +346,16 @@
 
         .wave-leaderboard .score-entry {
             border-left-color: #ff42ff;
+        }
+
+        .wave-leaderboard.power-saving .score-entry {
+            border-left-color: #ff4242;
+            background: linear-gradient(135deg, rgba(90, 45, 60, 0.5) 0%, rgba(120, 60, 80, 0.5) 100%);
+        }
+
+        .wave-leaderboard.power-saving .score-entry:hover {
+            background: linear-gradient(135deg, rgba(120, 60, 80, 0.7) 0%, rgba(140, 80, 100, 0.7) 100%);
+            box-shadow: 0 5px 20px rgba(255, 66, 66, 0.3);
         }
 
         .rank {
@@ -936,7 +951,7 @@ const waveData = {
                         </div>
                     </div>
 
-                    <div class="leaderboard-section wave-leaderboard">
+                    <div class="leaderboard-section wave-leaderboard power-saving">
                         <div class="leaderboard-title">
                             🌊 HIGHEST WAVES - POWER SAVING 🌊
                         </div>
