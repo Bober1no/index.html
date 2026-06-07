@@ -923,7 +923,7 @@
                 <div class="version-card major">
                     <div class="version-header">
                         <div class="version-badge major">v3.0</div>
-                        <div class="version-title">🚀 Artillery & Orbital Strike Update</div>
+                        <div class="version-title">🚀 Artillery, Orbital Strike & Skill Tree Update</div>
                     </div>
                     <ul class="change-list">
                         <li class="change-item feature">
@@ -945,6 +945,13 @@
                             <span class="change-text">
                                 <span class="change-type">Feature</span>
                                 <strong>NEW Orbital Strike!</strong> Smart targeting system provides a powerful new way to eliminate enemies
+                            </span>
+                        </li>
+                        <li class="change-item feature">
+                            <span class="change-emoji">🌳</span>
+                            <span class="change-text">
+                                <span class="change-type">Major</span>
+                                <strong>NEW Skill Tree!</strong> Spend scraps to unlock and upgrade a variety of skills that help you progress through the game
                             </span>
                         </li>
                         <li class="change-item qol">
@@ -987,6 +994,13 @@
                             <span class="change-text">
                                 <span class="change-type qol">QoL</span>
                                 All power-ups now work with number keys (1, 2, 3, etc.) for faster access
+                            </span>
+                        </li>
+                        <li class="change-item qol">
+                            <span class="change-emoji">🎞️</span>
+                            <span class="change-text">
+                                <span class="change-type qol">QoL</span>
+                                Added a 60 FPS cap for computers that could otherwise run above 60 FPS - keeps game speed consistent
                             </span>
                         </li>
                         <li class="change-item bugfix">
@@ -1352,14 +1366,11 @@
             
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and contents
                     tabs.forEach(t => t.classList.remove('active'));
                     contents.forEach(c => c.classList.remove('active'));
                     
-                    // Add active class to clicked tab
                     tab.classList.add('active');
                     
-                    // Show corresponding content
                     const targetContent = document.getElementById(tab.dataset.tab);
                     if (targetContent) {
                         targetContent.classList.add('active');
@@ -1459,7 +1470,6 @@
             initParallax();
             initKeyboardNav();
             
-            // Add some random glow effects
             setInterval(() => {
                 const cards = document.querySelectorAll('.item-card, .version-card');
                 if (cards.length > 0) {
@@ -1485,7 +1495,6 @@
             });
         }
         
-        // Initialize click feedback
         document.addEventListener('DOMContentLoaded', addClickFeedback);
     </script>
 </body>
